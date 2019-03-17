@@ -1,0 +1,51 @@
+drop table tp1;
+drop table tp2;
+drop table tp3;
+drop table tp4;
+drop table tp5;
+
+create table tp1 as
+select bene_id, bene_enrollmt_ref_yr, count(bene_enrollmt_ref_yr) as benerowcount
+from cms_deid.mbsf_ab_summary
+group by bene_id, bene_enrollmt_ref_yr;
+
+select benerowcount, count(benerowcount) as benerows
+from tp1
+group by benerowcount;
+
+create table tp2 as
+select bene_id
+from tp1
+where benerowcount > 1;
+
+create table tp3 as
+select bene_id, bene_enrollmt_ref_yr, 
+	bene_mdcr_entlmt_buyin_ind_01, bene_mdcr_entlmt_buyin_ind_02, bene_mdcr_entlmt_buyin_ind_03, 
+	bene_mdcr_entlmt_buyin_ind_04, bene_mdcr_entlmt_buyin_ind_05, bene_mdcr_entlmt_buyin_ind_06, 
+	bene_mdcr_entlmt_buyin_ind_07, bene_mdcr_entlmt_buyin_ind_08, bene_mdcr_entlmt_buyin_ind_09, 
+	bene_mdcr_entlmt_buyin_ind_10, bene_mdcr_entlmt_buyin_ind_11, bene_mdcr_entlmt_buyin_ind_12  
+from cms_deid.mbsf_ab_summary
+where bene_id in
+	(
+	select distinct bene_id
+	from tp2
+	);
+
+create table tp4 as
+select distinct * 
+from tp3;
+
+create table tp5 as
+select bene_id, bene_enrollmt_ref_yr, count(bene_enrollmt_ref_yr) as benerowcount
+from tp4
+group by bene_id, bene_enrollmt_ref_yr;
+
+select benerowcount, count(benerowcount) as benerows
+from tp5
+group by benerowcount;
+
+drop table tp1;
+drop table tp2;
+drop table tp3;
+drop table tp4;
+drop table tp5;
