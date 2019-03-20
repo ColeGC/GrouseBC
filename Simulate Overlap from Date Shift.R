@@ -72,3 +72,17 @@ View(cbind(c_old, c_shift))
 paste0(round(1 - mean(dd3_repRow), 3)*100, "%")
 # ... 8.8% should be high relative to what we see in the real data...
 # ... in CMS data, overlaps % only of subset with both overlap month from date shift that also has enroll status change
+                    
+par(mfcol = c(2,1))
+hist(lubridate::day(enroll_month$refdate)[which_dd3reps])
+hist(lubridate::day(enroll_month$refdate)[dd3_repRow])
+
+hist(lubridate::month(enroll_month$refdate)[which_dd3reps])
+hist(lubridate::month(enroll_month$refdate)[dd3_repRow])
+
+hist(lubridate::days_in_month(enroll_month$refdate)[which_dd3reps])
+hist(lubridate::days_in_month(enroll_month$refdate)[dd3_repRow])
+
+hist(enroll_month$shift_days[which_dd3reps])
+hist(enroll_month$shift_days[dd3_repRow])
+par(mfcol = c(1,1))
